@@ -10,8 +10,6 @@
 #SBATCH --output=/home/ruism/projects/def-rsdjjana/ruism/Dreamer/original/%A-%a.out
 #SBATCH --error=/home/ruism/projects/def-rsdjjana/ruism/Dreamer/original/%A-%a.err
 
-set -euo pipefail
-
 BASE_SAVE_DIR="$HOME/projects/def-rsdjjana/ruism/Dreamer/original"
 
 # Make sure log dir exists (SLURM will drop stdout/err here)
@@ -20,11 +18,11 @@ mkdir -p "$BASE_SAVE_DIR"
 sleep $(( (SLURM_ARRAY_TASK_ID % 10) * 3 ))
 
 # --- Clean env, load modules ---
+set -e -o pipefail
 module --force purge
 set +u
 source /cvmfs/soft.computecanada.ca/config/profile/bash.sh
 set -u
-source /cvmfs/soft.computecanada.ca/config/profile/bash.sh
 module load StdEnv/2020
 module load cuda/11.4
 module load glfw/3.3.2
@@ -55,7 +53,7 @@ _finish() {
     rsync -a --partial --inplace --no-whole-file "$RUN_DIR/" "$FINAL_DIR/"
   fi
 }
-trap _finish EXIT
+trap _finish EXIT TERM INT
 
 # --- Where the source code lives ---
 DREAMER_SRC="$HOME/projects/def-rsdjjana/ruism/Dreamer"
