@@ -27,6 +27,9 @@ module load StdEnv/2020
 module load cuda/11.4
 module load glfw/3.3.2
 
+module load ffmpeg/4.3.2
+export IMAGEIO_FFMPEG_EXE="$(command -v ffmpeg)"
+
 # --- Activate your venv ---
 source "$HOME/projects/def-rsdjjana/ruism/loca_env/bin/activate"
 
